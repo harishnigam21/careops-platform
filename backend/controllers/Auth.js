@@ -1,4 +1,5 @@
 import Users from "../models/User.js";
+import Workspaces from "../models/Workspace.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
@@ -38,7 +39,12 @@ export const LogIn = async (req, res) => {
         $set: { refreshToken: refresh_token },
       },
       { new: true, runValidators: true },
-    ).lean();
+    )
+      .populate(
+        "workspaceId",
+        "_id name address timezone email isActive onboarding",
+      )
+      .lean();
     res.cookie("jwt", refresh_token, {
       httpOnly: true,
       maxAge: 24 * 60 * 60 * 1000,
@@ -51,7 +57,7 @@ export const LogIn = async (req, res) => {
     });
   } catch (error) {
     console.error("Error from LogIn controller : ", error);
-    return res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
@@ -87,7 +93,7 @@ export const Register = async (req, res) => {
       .json({ message: "User has been registered Successfully " });
   } catch (error) {
     console.error("Error occurred at Register Controller : ", error);
-    return res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: "Internal Server Error" });
   }
 };
 //TODO: Not necessary now, priority-low
@@ -101,6 +107,10 @@ export const handleRefresh = async (req, res) => {
       return res.status(401).json({ message: "Cookie missing" });
     const findUser = await Users.findOne({ refreshToken: cookies.jwt })
       .select("+refreshToken +_id")
+      .populate(
+        "workspaceId",
+        "_id name address timezone email isActive onboarding",
+      )
       .lean();
     if (!findUser) {
       res.clearCookie("jwt", { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 });
@@ -123,7 +133,7 @@ export const handleRefresh = async (req, res) => {
     );
   } catch (error) {
     console.error("Error from handleRefresh controller : ", error);
-    return res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
@@ -150,6 +160,6 @@ export const logOut = async (req, res) => {
     return res.status(200).json({ status: true });
   } catch (error) {
     console.error("Error from logOut controller : ", error);
-    return res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: "Internal Server Error" });
   }
 };

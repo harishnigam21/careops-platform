@@ -37,7 +37,11 @@ const userSchema = mongoose.Schema(
           'Please choose either "owner" or "staff". {VALUE} is not allowed.',
       },
     },
-    workspaceId:{}
+    workspaceId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "workspaces",
+      default: null,
+    },
   },
   { timestamps: true },
 );

@@ -1,13 +1,15 @@
-import { useNavigate } from "react-router-dom";
-import Dashboard from "./Dashboard";
-import { useDispatch } from "react-redux";
+import { Outlet, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { changeLoginStatus, newUser } from "./store/Slices/userSlice";
 import useApi from "./hooks/Api";
 import { useEffect } from "react";
+import Loading from "./components/Loading";
 export default function App() {
-  const { sendRequest } = useApi();
+  const { loading, sendRequest } = useApi();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const user = useSelector((store) => store.user.userInfo);
+  
   //getting userInfo at every refresh and assigning new access token to local storage and userInfo to redux store
   useEffect(() => {
     sendRequest("refresh", "GET").then((result) => {
@@ -18,9 +20,13 @@ export default function App() {
       }
     });
   }, [dispatch, navigate, sendRequest]);
-  return (
-    <main className="flex flex-col bg-black">
-      <Dashboard />
+  return loading ? (
+    <div className="w-screen h-screen flex justify-center items-center">
+      <Loading />
+    </div>
+  ) : (
+    <main className="flex flex-col w-full h-screen overflow-auto">
+      <Outlet />
     </main>
   );
 }

@@ -3,11 +3,31 @@ import { Provider } from "react-redux";
 import myStore from "./store/Store";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
-import App from "./App.jsx";
 import Login from "./Login.jsx";
 import Register from "./Register.jsx";
+import OnBoarding from "./onBoarding.jsx";
+import Dashboard from "./Dashboard.jsx";
+import App from "./App.jsx";
+import CreateWorkSpace from "./components/CreateWorkSpace.jsx";
 const router = createBrowserRouter([
-  { path: "/", element: <App /> },
+  {
+    path: "/",
+    element: <App />,
+    children: [
+      {
+        index: true,
+        element: <Dashboard />,
+      },
+      {
+        path: "onboarding",
+        element: <OnBoarding />,
+      },
+      {
+        path: "create_workspace",
+        element: <CreateWorkSpace />,
+      },
+    ],
+  },
   { path: "/login", element: <Login /> },
   { path: "/register", element: <Register /> },
 ]);

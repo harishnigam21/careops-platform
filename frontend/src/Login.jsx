@@ -71,7 +71,14 @@ export default function Login() {
           window.localStorage.setItem("userInfo", JSON.stringify(data.user));
         }
         setTimeout(() => {
-          navigate(`/`, { replace: true });
+          const ws = data?.user?.workspaceId;
+          if (!ws) {
+            navigate("/onboarding", { replace: true });
+          } else if (!ws.isActive) {
+            navigate("/onboarding", { replace: true });
+          } else {
+            navigate("/", { replace: true });
+          }
         }, 1000);
       } else {
         const errorMessage =

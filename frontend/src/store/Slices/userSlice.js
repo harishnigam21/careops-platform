@@ -2,14 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const userSlice = createSlice({
   name: "User",
   initialState: {
-    userInfo: {
-      _id: "abcdefgh123456",
-      firstname: "abcd",
-      middlename: "mnop",
-      lastname: "wxyz",
-      email: "abcdmnopwxyz18@gmail.com",
-      role: "staff",
-    },
+    userInfo: null,
     loginStatus: window.localStorage.getItem("acTk") ? true : false,
   },
   reducers: {
@@ -28,7 +21,11 @@ const userSlice = createSlice({
         }
       }
     },
+    updateWorkSpace: (state, action) => {
+      state.userInfo.workspaceId = action.payload.data;
+    },
   },
 });
-export const { newUser, changeLoginStatus } = userSlice.actions;
+export const { newUser, changeLoginStatus, updateWorkSpace } =
+  userSlice.actions;
 export default userSlice.reducer;

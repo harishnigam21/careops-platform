@@ -1,5 +1,194 @@
 @import "tailwindcss";
+
+button {
+  cursor: pointer;
+}
+body,
 #root {
-  margin: 0;
-  padding: 0;
+  margin: 0px;
+  padding: 0px;
+  background-color: var(--color-bgprimary);
+  color: var(--color-text);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+div,
+section {
+  transition: all 0.3s ease;
+}
+
+button:disabled {
+  opacity: 0.5;
+}
+.noscrollbar::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+@theme {
+  /* --- Light Mode  --- */
+  --color-bgprimary: #ffffff;
+  --color-primary: #ff0033;
+  --color-secondary: #0f0f0f;
+  --color-tertiary: #2da6ff;
+  --color-border: #e5e7eb;
+  --color-text: #0f0f0f;
+  --color-txlight: #666666;
+}
+@media (prefers-color-scheme: dark) {
+  /* ---Dark Mode --- */
+  :root:not(.light):not(.dark) {
+    --color-bgprimary: #0f0f0f;
+    --color-primary: #ff0033;
+    --color-secondary: white;
+    --color-tertiary: #2da6ff;
+    --color-border: #d1d5db;
+    --color-text: white;
+    --color-txlight: #aaaaaa;
+  }
+}
+.dark {
+  --color-bgprimary: #0f0f0f;
+  --color-primary: #ff0033;
+  --color-secondary: white;
+  --color-tertiary: #2da6ff;
+  --color-border: #222222;
+  --color-text: white;
+  --color-txlight: #aaaaaa;
+}
+
+.light {
+  --color-bgprimary: #ffffff;
+  --color-primary: #ff0033;
+  --color-secondary: #0f0f0f;
+  --color-tertiary: #2da6ff;
+  --color-border: #d1d5db;
+  --color-text: #0f0f0f;
+  --color-txlight: #666666;
+}
+input:-webkit-autofill {
+  transition: background-color 5000s ease-in-out 0s;
+  -webkit-text-fill-color: white !important;
+}
+@layer components {
+  .spinner {
+    @apply w-5 aspect-square rounded-full border-4 animate-[spin_0.3s_linear_infinite];
+    @apply border-l-violet-500 border-r-green-500 border-b-orange-600 border-t-red-500;
+  }
+}
+@keyframes fromLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+@keyframes fromRight {
+  0% {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+@keyframes fromLeftReverse {
+  0% {
+    opacity: 0;
+    transform: translateX(0);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes fromTop {
+  0% {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes fromDown {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes fromUp {
+  0% {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes fromBottom {
+  0% {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes visibleIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes visibleOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+@keyframes book {
+  0% {
+    transform: rotateY(0deg);
+  }
+  25% {
+    transform: rotateY(-90deg);
+  }
+  50% {
+    transform: rotateY(-180deg);
+  }
+  75% {
+    transform: rotateY(-90deg);
+  }
+  100% {
+    transform: rotateY(0deg);
+  }
 }

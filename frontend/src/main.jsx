@@ -12,6 +12,7 @@ import CreateWorkSpace from "./components/CreateWorkSpace.jsx";
 import Email from "./components/setUp/Email.jsx";
 import Availability from "./components/setUp/Availability.jsx";
 import Booking from "./components/setUp/Booking.jsx";
+import CreateBooking from "./components/booking/CreateBooking.jsx";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -33,6 +34,15 @@ const router = createBrowserRouter([
       {
         path: "create_workspace",
         element: <CreateWorkSpace />,
+      },
+      {
+        path: "booking",
+        children: [
+          {
+            path: "create",
+            element: <CreateBooking />,
+          },
+        ],
       },
     ],
   },

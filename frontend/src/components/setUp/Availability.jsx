@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import useApi from "../../hooks/Api";
 import { updateWorkSpace } from "../../store/Slices/userSlice";
 
-export default function Booking() {
+export default function Availability() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { sendRequest, loading } = useApi();
@@ -18,7 +18,10 @@ export default function Booking() {
   const handleActivate = async () => {
     if (!workspaceId) return;
 
-    const res = await sendRequest(`service/${workspaceId}/booking`, "PATCH");
+    const res = await sendRequest(
+      `service/${workspaceId}/availability`,
+      "PATCH",
+    );
 
     if (res?.success) {
       dispatch(updateWorkSpace({ data: res.data.data }));
@@ -26,16 +29,16 @@ export default function Booking() {
         ? navigate("/", { replace: true })
         : navigate("/onboarding", { replace: true });
     } else {
-      setError(res?.error || "Failed to activate booking");
+      setError(res?.error || "Failed to activate availability");
     }
   };
 
   return (
     <section className="p-6 border rounded-lg flex flex-col gap-4">
-      <h2 className="text-xl font-bold">Booking Setup</h2>
+      <h2 className="text-xl font-bold">Availability Setup</h2>
 
       <p className="text-gray-600">
-        Enable booking and scheduling for your services.
+        Enable availability scheduling for bookings.
       </p>
 
       {error && <p className="text-red-500">{error}</p>}
@@ -45,7 +48,7 @@ export default function Booking() {
         className="px-4 py-2 bg-blue-600 text-white rounded w-fit flex gap-4 items-center"
         onClick={handleActivate}
       >
-        <p>Activate Booking</p>
+        <p>Activate Availability</p>
         {loading && <p className="spinner"></p>}
       </button>
     </section>

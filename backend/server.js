@@ -7,6 +7,7 @@ import credentials from "./middlewares/credentials/credentials.js";
 import connectDB from "./DB/DBConnection.js";
 import Auth from "./routes/Auth.js";
 import WorkSpace from "./routes/WorkSpace.js";
+import Service from "./routes/Service.js";
 const PORT = process.env.PORT || 5000;
 const app = express();
 configDotenv();
@@ -23,6 +24,7 @@ app.use(cors(corsOptions)); //enable CORS with various options
 // NOTE: In controller no validation of data has ben done, for validation separate middleware are created and used it before controller, in route.
 app.use("/", Auth);
 app.use("/", WorkSpace);
+app.use("/", Service);
 
 app.get("/", (req, res) =>
   res.status(200).json({ message: "Backend Server is Running Perfect" }),

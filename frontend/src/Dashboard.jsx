@@ -23,7 +23,7 @@ export default function Dashboard() {
       {/* Header */}
       <header className="flex flex-col gap-1">
         <h1 className="text-2xl font-bold">Welcome to {workspaceId.name}</h1>
-        <p className="text-gray-500">
+        <p className="text-txlight">
           Onboarding Progress: {completed} / {total}
         </p>
       </header>
@@ -61,6 +61,25 @@ export default function Dashboard() {
           <h2 className="font-semibold">Total Services</h2>
           <p>{total}</p>
         </div>
+      </article>
+
+      {/* Create Booking CTA */}
+      <article className="flex items-center justify-between gap-4 p-4 border rounded-lg">
+        <h2 className="font-semibold text-2xl">Bookings</h2>
+
+        {workspaceId.isActive ? (
+          <div
+            className="flex bg-blue-600 w-8 h-8 sm:w-fit sm:h-fit sm:rounded-md sm:py-2 sm:px-4 sm:gap-4 text-white rounded-full items-center justify-center overflow-hidden cursor-pointer"
+            onClick={() => navigate("/booking/create")}
+          >
+            <span className="scale-200 mb-1">+</span>
+            <span className={`hidden sm:flex`}>Create Booking</span>
+          </div>
+        ) : (
+          <p className="text-sm text-red-500">
+            Complete onboarding to create bookings
+          </p>
+        )}
       </article>
     </section>
   );

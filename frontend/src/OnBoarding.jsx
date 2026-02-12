@@ -85,7 +85,7 @@ export default function OnBoarding() {
       </article>
 
       {/* particular setup */}
-      <article className="flex flex-col bg-red-500 text-white">
+      <article className="flex flex-col">
         <Outlet />
       </article>
     </section>

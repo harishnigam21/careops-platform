@@ -9,6 +9,9 @@ import OnBoarding from "./onBoarding.jsx";
 import Dashboard from "./Dashboard.jsx";
 import App from "./App.jsx";
 import CreateWorkSpace from "./components/CreateWorkSpace.jsx";
+import Email from "./components/setUp/Email.jsx";
+import Availability from "./components/setUp/Availability.jsx";
+import Booking from "./components/setUp/Booking.jsx";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -21,6 +24,11 @@ const router = createBrowserRouter([
       {
         path: "onboarding",
         element: <OnBoarding />,
+        children: [
+          { path: "setup/email", element: <Email /> },
+          { path: "setup/booking", element: <Booking /> },
+          { path: "setup/availability", element: <Availability /> },
+        ],
       },
       {
         path: "create_workspace",

@@ -73,9 +73,7 @@ export default function Login() {
         setTimeout(() => {
           const ws = data?.user?.workspaceId;
           if (!ws) {
-            navigate("/onboarding", { replace: true });
-          } else if (!ws.isActive) {
-            navigate("/onboarding", { replace: true });
+            navigate("/create_workspace", { replace: true });
           } else {
             navigate("/", { replace: true });
           }

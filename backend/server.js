@@ -8,6 +8,7 @@ import connectDB from "./DB/DBConnection.js";
 import Auth from "./routes/Auth.js";
 import WorkSpace from "./routes/WorkSpace.js";
 import Service from "./routes/Service.js";
+import Booking from "./routes/Booking.js";
 const PORT = process.env.PORT || 5000;
 const app = express();
 configDotenv();
@@ -25,6 +26,7 @@ app.use(cors(corsOptions)); //enable CORS with various options
 app.use("/", Auth);
 app.use("/", WorkSpace);
 app.use("/", Service);
+app.use("/", Booking);
 
 app.get("/", (req, res) =>
   res.status(200).json({ message: "Backend Server is Running Perfect" }),

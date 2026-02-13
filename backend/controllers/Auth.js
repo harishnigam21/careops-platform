@@ -42,7 +42,7 @@ export const LogIn = async (req, res) => {
     )
       .populate(
         "workspaceId",
-        "_id name address timezone email isActive onboarding",
+        "_id name address timezone email isActive onboarding slug",
       )
       .lean();
     res.cookie("jwt", refresh_token, {
@@ -109,7 +109,7 @@ export const handleRefresh = async (req, res) => {
       .select("+refreshToken +_id")
       .populate(
         "workspaceId",
-        "_id name address timezone email isActive onboarding",
+        "_id name address timezone email isActive onboarding slug",
       )
       .lean();
     if (!findUser) {

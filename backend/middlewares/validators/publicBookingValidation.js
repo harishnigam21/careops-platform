@@ -1,7 +1,7 @@
-const bookingValidation = (req, res, next) => {
-  const { name, email, startTime, endTime } = req.body;
+const publicBookingValidation = (req, res, next) => {
+  const { workspaceSlug, name, email, startTime, endTime } = req.body;
 
-  if (!name || !email || !startTime || !endTime) {
+  if (!workspaceSlug || !name || !email || !startTime || !endTime) {
     return res.status(422).json({
       success: false,
       message: "All fields are required",
@@ -22,8 +22,7 @@ const bookingValidation = (req, res, next) => {
     });
   }
 
-  // If all checks pass
-  console.log("Booking Input Validation successful");
   next();
 };
-export default bookingValidation;
+
+export default publicBookingValidation;

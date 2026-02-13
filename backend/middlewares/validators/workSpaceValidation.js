@@ -1,6 +1,6 @@
 const workSpaceValidation = (req, res, next) => {
   const { email, name, timezone } = req.body;
-  const nameRegex = /^[a-zA-Z]+$/;
+  const nameRegex = /^[a-zA-Z][a-zA-Z\s\-']{1,50}$/;
   // Helper to send response and stop execution immediately
   const sendError = (error) => {
     return res.status(422).json({ success: false, message: error });

@@ -3,15 +3,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import useApi from "../../hooks/Api";
 import { setBookings } from "../../store/Slices/bookingSlice";
+import SlotList from "../public/SlotList";
+import { useEffect } from "react";
 export default function CreateBooking() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { loading, sendRequest } = useApi(); //custom hook, using loading to manage loading between api calls and sendRequest function to make api call
-  const workspaceId = useSelector(
-    (store) => store.user.userInfo?.workspaceId?._id,
-  );
+  const workspace = useSelector((store) => store.user.userInfo?.workspaceId);
   const [info, setInfo] = useState({
-    title: "",
+    name: "",
+    email: "",
     date: "",
     startTime: "",
     endTime: "",
@@ -23,6 +24,24 @@ export default function CreateBooking() {
     message: "",
     color: "white",
   });
+  const [slots, setSlots] = useState(null);
+  const [selectedSlot, setSelectedSlot] = useState(null);
+  useEffect(() => {
+    if (selectedSlot && slots.length > 0) {
+      setInfo((prev) => ({
+        ...prev,
+        startTime: selectedSlot.start,
+        endTime: selectedSlot.end,
+      }));
+    } else {
+      setSelectedSlot(null);
+      setInfo((prev) => ({
+        ...prev,
+        startTime: "",
+        endTime: "",
+      }));
+    }
+  }, [selectedSlot, slots]);
   // & this function reflect the message to user
   const showInfoFunc = (color, message) => {
     setShowInfo({ status: true, message, color });
@@ -31,12 +50,21 @@ export default function CreateBooking() {
     }, 4000);
   };
   const validateData = () => {
-    //Title Validation
-    if (!info.title || info.title.length < 3) {
-      showInfoFunc("red", "Tile not valid, require atleast 3 character");
+    //  Names: Only alphabets allowed
+    const nameRegex = /^[a-zA-Z][a-zA-Z\s\-']{1,50}$/;
+    if (!info.name.trim() || !nameRegex.test(info.name)) {
+      showInfoFunc("red", "Name is required and should contain only letters.");
       return false;
     }
-
+    //  Email: Standard RFC format
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test(info.email)) {
+      showInfoFunc(
+        "red",
+        "Please enter a valid email address (e.g., name@domain.com).",
+      );
+      return false;
+    }
     //Date validation
     if (!info.date) {
       showInfoFunc("red", "Missing Date");
@@ -52,21 +80,27 @@ export default function CreateBooking() {
 
     //Time Validation
     if (!info.startTime) {
-      showInfoFunc("red", "Missing startTime");
+      showInfoFunc("red", "Missing slot");
       return false;
     }
-    const start = parseInt(info.startTime.replace(":", ""));
 
     if (!info.endTime) {
-      showInfoFunc("red", "Missing endTime");
+      showInfoFunc("red", "Missing slot");
       return false;
     }
-    const end = parseInt(info.endTime.replace(":", ""));
-    if (end <= start) {
-      showInfoFunc("red", "End time must be after start time");
-      return false;
-    }
+
     return true;
+  };
+  const getSlots = async (date) => {
+    await sendRequest(
+      `public/availability/${workspace.slug}?date=${date}`,
+    ).then((result) => {
+      const data = result?.data;
+      showInfoFunc(result.success ? "green" : "red", data.message);
+      if (result && result.success) {
+        setSlots(data.slots);
+      }
+    });
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -75,7 +109,7 @@ export default function CreateBooking() {
       return; // Stop the function here
     }
     console.log("validation completed..");
-    sendRequest(`booking/${workspaceId}`, "POST", info, {}, false).then(
+    sendRequest(`booking/${workspace._id}`, "POST", info, {}, false).then(
       (result) => {
         const data = result?.data;
         showInfoFunc(result.success ? "green" : "red", data.message);
@@ -97,30 +131,55 @@ export default function CreateBooking() {
         onSubmit={handleSubmit}
         className="flex flex-col gap-8 w-full md:w-3/4 xl:w-1/2 self-center"
       >
-        {/* 1st row Title*/}
-        <article className="whitespace-nowrap flex flex-col items-center w-full">
-          <label
-            htmlFor="title"
-            id="titleLabel"
-            className="bg-bgprimary ml-4 z-2 w-fit self-start after:content-['*'] after:text-red-600 after:ml-1"
-          >
-            Title
-          </label>
-          <input
-            type="text"
-            name="title"
-            id="title"
-            className="border border-border rounded-md p-2 -mt-3 w-full"
-            placeholder="Enter Title here..."
-            value={info.title}
-            onChange={(e) =>
-              setInfo((prev) => ({ ...prev, title: e.target.value }))
-            }
-            aria-required
-          />
+        {/* 1st row name and email*/}
+        <article className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {/* name */}
+          <article className="whitespace-nowrap flex flex-col items-center w-full">
+            <label
+              htmlFor="bname"
+              id="bnameLabel"
+              className="bg-bgprimary ml-4 z-2 w-fit self-start after:content-['*'] after:text-red-600 after:ml-1"
+            >
+              Name
+            </label>
+            <input
+              type="text"
+              name="bname"
+              id="bname"
+              value={info.name}
+              className="border border-border rounded-md p-2 -mt-3 w-full"
+              placeholder="Enter full name here.."
+              onChange={(e) =>
+                setInfo((prev) => ({ ...prev, name: e.target.value }))
+              }
+              aria-required
+            />
+          </article>
+          {/* email */}
+          <article className="relative whitespace-nowrap flex flex-col items-center justify-center w-full">
+            <label
+              htmlFor="email"
+              id="emailLabel"
+              className="bg-bgprimary ml-4 z-2 w-fit self-start after:content-['*'] after:text-red-600 after:ml-1"
+            >
+              Email
+            </label>
+            <input
+              type="text"
+              name="email"
+              id="email"
+              value={info.email}
+              className="border border-border rounded-md p-2 -mt-3 w-full"
+              placeholder="Enter email here..."
+              aria-required
+              onChange={(e) =>
+                setInfo((prev) => ({ ...prev, email: e.target.value }))
+              }
+            />
+          </article>
         </article>
         {/* 2nd row Date & Time*/}
-        <article className="flex flex-col sm:flex-row gap-4 w-full">
+        <article className="flex flex-col md:flex-row gap-12 w-full">
           {/* Date*/}
           <article className="whitespace-nowrap flex flex-col items-center">
             <label
@@ -137,56 +196,39 @@ export default function CreateBooking() {
               className="border border-border rounded-md p-2 -mt-3 self-start"
               value={info.date}
               min={new Date().toISOString().split("T")[0]}
-              onChange={(e) =>
-                setInfo((prev) => ({ ...prev, date: e.target.value }))
-              }
+              onChange={(e) => {
+                setInfo((prev) => ({ ...prev, date: e.target.value }));
+                getSlots(e.target.value);
+              }}
               aria-required
             />
           </article>
           {/* Time */}
-          <article className="flex gap-4">
-            {/* Start Time */}
-            <article className="whitespace-nowrap flex flex-col items-center">
-              <label
-                htmlFor="startTime"
-                id="startTimeLabel"
-                className="bg-bgprimary ml-4 z-2 w-fit self-start after:content-['*'] after:text-red-600 after:ml-1"
-              >
-                Start Time
-              </label>
-              <input
-                type="time"
-                name="startTime"
-                id="startTime"
-                className="p-2 -mt-3 rounded-md border border-border self-start"
-                value={info.startTime}
-                onChange={(e) =>
-                  setInfo((prev) => ({ ...prev, startTime: e.target.value }))
-                }
-                aria-required
-              />
-            </article>
-            {/* End Time */}
-            <article className="whitespace-nowrap flex flex-col items-center">
-              <label
-                htmlFor="endTime"
-                id="endTimeLabel"
-                className="bg-bgprimary ml-4 z-2 w-fit self-start after:content-['*'] after:text-red-600 after:ml-1"
-              >
-                End Time
-              </label>
-              <input
-                type="time"
-                name="endTime"
-                id="endTime"
-                className="p-2 -mt-3 rounded-md border border-border self-start"
-                value={info.endTime}
-                onChange={(e) =>
-                  setInfo((prev) => ({ ...prev, endTime: e.target.value }))
-                }
-                aria-required
-              />
-            </article>
+          <article className="flex items-center gap-4 w-full">
+            {/* Time Slots */}
+            {!loading ? (
+              slots ? (
+                slots.length > 0 ? (
+                  <SlotList
+                    slots={slots}
+                    onSelect={setSelectedSlot}
+                    selectedSlot={selectedSlot}
+                  />
+                ) : (
+                  <p className="text-red-500 text-center text-xl mt-2">
+                    No Slot Available
+                  </p>
+                )
+              ) : (
+                <p className="text-blue-500 text-center text-xl mt-2">
+                  Please select date to get slots..
+                </p>
+              )
+            ) : (
+              <div className="flex items-center justify-center">
+                <p className="spinner h-18 w-18" />
+              </div>
+            )}
           </article>
         </article>
         {/* 3rd Row Description */}
@@ -213,7 +255,7 @@ export default function CreateBooking() {
         {showInfo.status && (
           <p
             style={{ color: showInfo.color }}
-            className="text-center font-bold"
+            className="text-center font-bold text-xl"
           >
             {showInfo.message}
           </p>

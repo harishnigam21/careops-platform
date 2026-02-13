@@ -6,11 +6,15 @@ const bookingSchema = mongoose.Schema(
       ref: "workspaces",
       required: true,
     },
-    title: {
+    name: {
       type: String,
       required: true,
     },
     date: {
+      type: String,
+      required: true,
+    },
+    email: {
       type: String,
       required: true,
     },
@@ -22,13 +26,16 @@ const bookingSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    status: {
+      type: String,
+      required: true,
+    },
     description: {
       type: String,
     },
-    created_by: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "users",
-      required: true,
+    booked_by: {
+      type: String,
+      default: "Guest",
     },
   },
   { timestamps: true },

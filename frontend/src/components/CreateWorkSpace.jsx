@@ -29,7 +29,7 @@ export default function CreateWorkSpace() {
 
   const validateData = () => {
     //  Names: Only alphabets allowed
-    const nameRegex = /^[A-Za-z]+$/;
+    const nameRegex = /^[a-zA-Z][a-zA-Z\s\-']{1,50}$/;
     if (!info.name.trim() || !nameRegex.test(info.name)) {
       showInfoFunc(
         "red",

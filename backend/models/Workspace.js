@@ -10,6 +10,13 @@ const workspaceSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    slug: {
+      type: String,
+      required: true,
+      unique: true,
+      lowercase: true,
+      trim: true,
+    },
     address: {
       type: String,
     },
@@ -31,6 +38,22 @@ const workspaceSchema = mongoose.Schema(
       emailSetup: { type: Boolean, default: false },
       bookingSetup: { type: Boolean, default: false },
       availabilitySetup: { type: Boolean, default: false },
+    },
+    availability: {
+      days: {
+        type: [String],
+        default: [],
+      },
+      startTime: {
+        type: String,
+      },
+      endTime: {
+        type: String,
+      },
+      slotDuration: {
+        type: Number, // in minutes
+        default: 30,
+      },
     },
   },
   { timestamps: true },

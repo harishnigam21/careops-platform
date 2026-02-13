@@ -13,6 +13,7 @@ import Email from "./components/setUp/Email.jsx";
 import Availability from "./components/setUp/Availability.jsx";
 import Booking from "./components/setUp/Booking.jsx";
 import CreateBooking from "./components/booking/CreateBooking.jsx";
+import PublicBookingPage from "./components/booking/PublicBookingPage.jsx";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -48,6 +49,7 @@ const router = createBrowserRouter([
   },
   { path: "/login", element: <Login /> },
   { path: "/register", element: <Register /> },
+  { path: "/book/:slug", element: <PublicBookingPage /> },
 ]);
 createRoot(document.getElementById("root")).render(
   <Provider store={myStore}>

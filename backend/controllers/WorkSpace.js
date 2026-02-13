@@ -63,7 +63,7 @@ export const getPublicWorkspace = async (req, res) => {
     }
 
     if (!workspace.isActive) {
-      return res.status(403).json({
+      return res.status(404).json({
         message: "Workspace is not active",
       });
     }

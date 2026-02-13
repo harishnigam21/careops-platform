@@ -7,7 +7,7 @@ import {
 import { MdDelete } from "react-icons/md";
 export default function BookingCard({ bk }) {
   return (
-    <div className="relative flex flex-col justify-between gap-3 bg-bgprimary border p-3 rounded-md border-txlight/10 overflow-hidden">
+    <div className="relative flex flex-col justify-between gap-3 bg-bgprimary border p-3 rounded-md border-txlight/30 overflow-hidden">
       <div className="flex gap-2 items-center justify-between">
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-4 whitespace-nowrap">
@@ -22,7 +22,7 @@ export default function BookingCard({ bk }) {
           </div>
         </div>
       </div>
-      <hr className="border-t border-border/10 scale-x-150 w-full" />
+      <hr className="border-t border-txlight/30 scale-x-150 w-full" />
       <div className="flex flex-col justify-center gap-3 whitespace-nowrap grow">
         <div className="flex gap-2">
           <span>Current Status</span>
@@ -51,7 +51,7 @@ export default function BookingCard({ bk }) {
           </div>
         )}
       </div>
-      <hr className="border-t border-border/10 scale-x-150 w-full" />
+      <hr className="border-t border-txlight/30 scale-x-150 w-full" />
       <div className="flex justify-between gap-2 whitespace-nowrap overflow-scroll noscrollbar">
         <small>Booked by : {bk.booked_by},</small>
         <small>{getDaysBetween(bk.createdAt)}</small>

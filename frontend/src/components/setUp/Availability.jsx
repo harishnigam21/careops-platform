@@ -45,6 +45,9 @@ export default function Availability() {
         : navigate("/onboarding", { replace: true });
     } else {
       setError(res?.error || "Failed to save availability");
+      setTimeout(() => {
+        setError("");
+      }, 3000);
     }
   };
 

@@ -99,7 +99,11 @@ export const saveAvailability = async (req, res) => {
     };
 
     workspace.onboarding.availabilitySetup = true;
-
+    const { emailSetup, bookingSetup, availabilitySetup } =
+      workspace.onboarding;
+    if (emailSetup && bookingSetup && availabilitySetup) {
+      workspace.isActive = true;
+    }
     await workspace.save();
 
     console.log("Availability saved successfully");

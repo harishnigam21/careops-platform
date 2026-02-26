@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
-
+import { IoSettings } from "react-icons/io5";
 export default function OnBoarding() {
   const data = useSelector((store) => store.user.userInfo);
   const navigate = useNavigate();
@@ -54,7 +54,7 @@ export default function OnBoarding() {
         {Object.entries(onboarding).map(([key, value]) => (
           <div
             key={key}
-            className="flex justify-between items-center p-4 border rounded-lg"
+            className="flex flex-wrap gap-4 justify-between items-center p-4 border rounded-lg"
           >
             <div>
               <p className="font-semibold capitalize">
@@ -66,9 +66,19 @@ export default function OnBoarding() {
             </div>
 
             {value ? (
-              <span className="px-3 py-1 text-sm bg-green-500 text-white rounded">
-                Active
-              </span>
+              <div className="flex items-center gap-4">
+                <div
+                  className="flex items-center cursor-pointer"
+                  onClick={() =>
+                    navigate(`/onboarding/setup/${serviceRouteMap[key]}`)
+                  }
+                >
+                  <IoSettings className="text-text text-2xl" />
+                </div>
+                <span className="px-3 py-1 text-sm bg-green-500 text-white rounded">
+                  Active
+                </span>
+              </div>
             ) : (
               <button
                 disabled={selected == serviceRouteMap[key]}
@@ -83,6 +93,9 @@ export default function OnBoarding() {
           </div>
         ))}
       </article>
+
+      <hr className="border border-border/10 w-full my-5 border-dashed" />
+      {/* TODO:Use back arraw or dashboard navigation where necessary, more to do at service settings */}
 
       {/* particular setup */}
       <article className="flex flex-col">
